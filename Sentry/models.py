@@ -3,7 +3,7 @@ from __future__ import annotations
 import copy
 from dataclasses import asdict, dataclass, field, fields
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from .taxonomy import FailureType, parse_failure_type
 
@@ -15,12 +15,12 @@ def utcnow() -> datetime:
 @dataclass
 class AgentAction:
     raw: str
-    tool_name: Optional[str] = None
+    tool_name: str | None = None
     tool_args: dict[str, Any] = field(default_factory=dict)
     parsed_ok: bool = True
     schema_valid: bool = True
-    parser_error: Optional[str] = None
-    schema_error: Optional[str] = None
+    parser_error: str | None = None
+    schema_error: str | None = None
 
 
 @dataclass
@@ -30,7 +30,7 @@ class AgentStep:
     reasoning: str
     action: AgentAction
     observation: str
-    task_progress_score: Optional[float] = None
+    task_progress_score: float | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -97,8 +97,8 @@ class DetectionResult:
     confidence: float
     rationale: str
     source: str = "rule"
-    recommended_constraint: Optional[str] = None
-    raw_response: Optional[str] = None
+    recommended_constraint: str | None = None
+    raw_response: str | None = None
     local_evidence: list[str] = field(default_factory=list)
     retrieval_labels: list[str] = field(default_factory=list)
 
@@ -111,11 +111,11 @@ class PlaybookInsight:
     created_at: datetime = field(default_factory=utcnow)
     success_count: int = 1
     merge_count: int = 0
-    source_summary: Optional[str] = None
+    source_summary: str | None = None
     confidence: float = 1.0
-    retrieval_label: Optional[str] = None
-    task_family: Optional[str] = None
-    action_space: Optional[str] = None
+    retrieval_label: str | None = None
+    task_family: str | None = None
+    action_space: str | None = None
     final_score_sum: float = 0.0
     final_score_count: int = 0
     task_success_count: int = 0
@@ -129,7 +129,10 @@ class PlaybookInsight:
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> "PlaybookInsight":
         raw = dict(data)
-        raw["failure_type"] = parse_failure_type(raw.get("failure_type"), FailureType.NO_FAILURE)
+        raw["failure_type"] = parse_failure_type(
+            raw.get("failure_type"),
+            FailureType.NO_FAILURE,
+        )
         created = raw.get("created_at")
         raw["created_at"] = (
             datetime.fromisoformat(created)
@@ -211,11 +214,11 @@ class EscapeResult:
     failure_score_after: float
     progress_delta: float
     helped_task: bool = False
-    task_progress_delta: Optional[float] = None
+    task_progress_delta: float | None = None
     resolved_labels: list[str] = field(default_factory=list)
     unresolved_labels: list[str] = field(default_factory=list)
-    reflection: Optional[str] = None
-    raw_response: Optional[str] = None
+    reflection: str | None = None
+    raw_response: str | None = None
 
 
 @dataclass

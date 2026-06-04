@@ -23,8 +23,10 @@ class SentryRunner:
             judge = model_to_text_judge(model)
             detector = detector or judge
             verifier = verifier or judge
+
         if detector is None or verifier is None:
             raise ValueError("Provide model or both detector and verifier callbacks.")
+
         self.guard = Sentry(
             config or SentryConfig(),
             guard_judge_callback=detector,
@@ -74,10 +76,12 @@ def _response_to_text(response: Any) -> str:
         return response
     if isinstance(response, dict):
         return _dict_response_to_text(response)
+
     for attr in ("text", "content", "output_text"):
         value = getattr(response, attr, None)
         if value:
             return _content_to_text(value)
+
     return str(response)
 
 
@@ -95,6 +99,7 @@ def _dict_response_to_text(response: dict) -> str:
                 return _content_to_text(message["content"])
             if first.get("text"):
                 return _content_to_text(first["text"])
+
     return str(response)
 
 
@@ -110,5 +115,7 @@ def _content_to_text(value: Any) -> str:
                     parts.append(str(text))
             else:
                 parts.append(str(item))
+
         return "\n".join(parts)
+
     return str(value)

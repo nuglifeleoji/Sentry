@@ -32,7 +32,9 @@ def string_similarity(a: str, b: str) -> float:
     return SequenceMatcher(None, a, b).ratio()
 
 
-def default_sections(config: PlaybookConfig | None = None) -> dict[FailureType, PlaybookSection]:
+def default_sections(
+    config: PlaybookConfig | None = None,
+) -> dict[FailureType, PlaybookSection]:
     cfg = config or PlaybookConfig()
     return {
         FailureType.PROGRESS_FAILURE: _empty_section(
@@ -179,12 +181,16 @@ class PlaybookManager:
 
     def _compress_label(self, section: PlaybookSection, label: str) -> None:
         insights = section.label_insights.get(label, [])
-        if len(insights) <= section.max_insights and _insight_chars(insights) <= section.max_chars:
+        within_count = len(insights) <= section.max_insights
+        within_chars = _insight_chars(insights) <= section.max_chars
+        if within_count and within_chars:
             return
+
         insights.sort(
             key=lambda item: (item.success_count, item.confidence, -item.merge_count),
             reverse=True,
         )
+
         kept: list[PlaybookInsight] = []
         used = 0
         for item in insights:
@@ -197,7 +203,10 @@ class PlaybookManager:
         section.label_insights[label] = kept
 
 
-def build_candidate_insights(event: RescueEvent, result: EscapeResult) -> list[PlaybookInsight]:
+def build_candidate_insights(
+    event: RescueEvent,
+    result: EscapeResult,
+) -> list[PlaybookInsight]:
     reflection = str(result.reflection or "").strip()
     if not reflection:
         return []
@@ -237,7 +246,10 @@ def _empty_section(
     )
 
 
-def _merge_with_defaults(default: PlaybookSection, loaded: PlaybookSection) -> PlaybookSection:
+def _merge_with_defaults(
+    default: PlaybookSection,
+    loaded: PlaybookSection,
+) -> PlaybookSection:
     label_insights: dict[str, list[PlaybookInsight]] = {}
     for label, insights in loaded.label_insights.items():
         normalized = normalize_retrieval_label(label, loaded.failure_type)

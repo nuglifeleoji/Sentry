@@ -58,10 +58,10 @@ class SentryConfig:
         raw = raw or {}
         trace = _dataclass_from_dict(TraceConfig, raw.get("trace"))
         intervention = _dataclass_from_dict(InterventionConfig, raw.get("intervention"))
-
         playbook = _dataclass_from_dict(PlaybookConfig, raw.get("playbook"))
         guard_judge = _dataclass_from_dict(GuardJudgeConfig, raw.get("guard_judge"))
         logging = _dataclass_from_dict(LoggingConfig, raw.get("logging"))
+
         return cls(
             trace=trace,
             intervention=intervention,

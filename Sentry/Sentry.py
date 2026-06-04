@@ -1,24 +1,24 @@
 from __future__ import annotations
 
 import uuid
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
-from .detector import SentryDetector
 from .config import SentryConfig
-from .taxonomy import FailureType, labels_for_failure_type, normalize_retrieval_label
+from .detector import SentryDetector
+from .logging import JSONLLogger
 from .models import (
     AgentStep,
+    DetectionResult,
     EscapeResult,
     FailureDetection,
-    DetectionResult,
+    LocalTraceWindow,
     PlaybookInsight,
     RescueEvent,
     RescuePrompt,
-    LocalTraceWindow,
 )
-from .logging import JSONLLogger
 from .playbook import PlaybookManager, build_candidate_insights
 from .router import route_rescue
+from .taxonomy import FailureType, labels_for_failure_type, normalize_retrieval_label
 from .verifier import EscapeVerifier
 
 
@@ -51,7 +51,7 @@ class Sentry:
             self.active_rescue_event.post_rescue_steps.append(step)
             self._maybe_verify_active_rescue()
 
-    def maybe_rescue(self) -> Optional[RescuePrompt]:
+    def maybe_rescue(self) -> RescuePrompt | None:
         if self.active_rescue_event is not None or not self.window.steps:
             return None
 
@@ -224,7 +224,9 @@ class Sentry:
         self._log(escape_event)
         if not result.escaped:
             rescue_key = getattr(event, "rescue_key", self._rescue_key(event.detection))
-            self.failed_rescue_counts[rescue_key] = self.failed_rescue_counts.get(rescue_key, 0) + 1
+            self.failed_rescue_counts[rescue_key] = (
+                self.failed_rescue_counts.get(rescue_key, 0) + 1
+            )
         if (
             event.failure_type != FailureType.ACTION_VALIDITY_FAILURE
             and result.escaped
