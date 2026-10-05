@@ -7,7 +7,7 @@ Sentry runs alongside your agent loop without replacing the agent, environment, 
 
 **[Quick Start](#quick-start)**  |  **[Paper (arXiv)](https://arxiv.org/abs/2610.02994)**  |  **[License](LICENSE)**
 
-![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) [![MIT License](https://img.shields.io/badge/License-MIT-2ea44f)](LICENSE)
+![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) [![MIT License](https://img.shields.io/badge/License-MIT-2ea44f)](LICENSE) [![arXiv](https://img.shields.io/badge/arXiv-2610.02994-b31b1b)](https://arxiv.org/abs/2610.02994)
 
 ## What is Sentry?
 
