@@ -5,7 +5,7 @@
 Detect execution failures, guide recovery, and learn reusable lessons from verified recoveries.  
 Sentry runs alongside your agent loop without replacing the agent, environment, or evaluator.
 
-**[Quick Start](#quick-start)**  |  **[Paper (PDF)](assets/Sentry_paper.pdf)**  |  **[License](LICENSE)**
+**[Quick Start](#quick-start)**  |  **[Paper (arXiv)](https://arxiv.org/abs/2610.02994)**  |  **[License](LICENSE)**
 
 ![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) [![MIT License](https://img.shields.io/badge/License-MIT-2ea44f)](LICENSE)
 
