@@ -1,0 +1,24 @@
+# Supplied manuscript Sections 3, 4.3 and Appendix A.6.2.
+trace:
+  window_size: 5
+  post_rescue_horizon: 10
+retrieval:
+  top_k: 5
+  primary_label_cap: 2
+model:
+  model: Qwen3.5-9B
+  temperature: 0.0
+  max_tokens: 4096
+  structured_outputs: true
+task_agent:
+  temperature: 0.7
+  max_tokens: 384
+  structured_outputs: false
+playbook:
+  persist_path: null
+logging:
+  enabled: true
+  log_path: null
+
+# Configure an endpoint explicitly for live inference, or pass a model callback.
+api: null

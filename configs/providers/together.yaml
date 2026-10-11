@@ -1,0 +1,12 @@
+# The manuscript used Together for all model calls (Section 4.3).
+# Fill the exact served model ID from your experiment records; the paper gives
+# backbone names, not a guaranteed currently available deployment identifier.
+# Official API base: https://docs.together.ai/docs/inference/openai-compatibility
+api:
+  provider: openai_compatible
+  base_url: https://api.together.ai/v1
+  model: YOUR_DEPLOYMENT_MODEL_ID
+  api_key_env: TOGETHER_API_KEY
+  json_mode: native
+  timeout: 120.0
+  max_retries: 0

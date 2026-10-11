@@ -79,9 +79,9 @@ finally:
 
 Your application remains responsible for generating, validating, and executing actions. See the integration guide for the full lifecycle and validity rules.
 
-### Run the AppWorld Integration
+### Run the AppWorld Benchmark
 
-AppWorld is the included reference integration:
+The reference benchmark in `benchmarks/appworld/` uses the official AppWorld environment and evaluator. Run it from the repository checkout:
 
 ```bash
 python3.11 -m venv .venv-appworld
@@ -89,9 +89,9 @@ source .venv-appworld/bin/activate
 python -m pip install -e '.[appworld]'
 appworld install
 export APPWORLD_ROOT="$PWD/outputs/appworld-root"
-appworld download data
+appworld download data --root "$APPWORLD_ROOT"
 export OPENROUTER_API_KEY="your-api-key"
-sentry run appworld --config configs/providers/openrouter.yaml
+python -m benchmarks.appworld.run --config configs/providers/openrouter.yaml
 ```
 
 See the AppWorld guide for environment setup, credentials, and run limits.

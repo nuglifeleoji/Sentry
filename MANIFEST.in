@@ -1,0 +1,13 @@
+# Reset implicit/stale file lists, then declare the supported source distribution.
+global-exclude *
+include pyproject.toml MANIFEST.in README.md LICENSE
+include .env.example .gitignore
+include Sentry/*.py
+include benchmarks/__init__.py benchmarks/appworld/__init__.py
+include benchmarks/appworld/adapter.py benchmarks/appworld/run.py
+include scripts/check_release.py
+include configs/paper.yaml
+include configs/providers/openai.yaml configs/providers/openai_responses.yaml configs/providers/openai_compatible.yaml
+include configs/providers/openrouter.yaml configs/providers/anthropic.yaml configs/providers/gemini.yaml configs/providers/together.yaml
+prune tests
+global-exclude *.py[cod] *.pem *.key *secret* *credential* *private*

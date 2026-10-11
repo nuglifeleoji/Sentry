@@ -1,0 +1,12 @@
+# Same nominal backbone as the paper; OpenRouter serving is a separate condition.
+# Provider availability can change. Confirm the model and parameters before a run.
+api:
+  provider: openrouter
+  model: qwen/qwen3.5-9b
+  api_key_env: OPENROUTER_API_KEY
+  json_mode: native
+  timeout: 120.0
+  max_retries: 0
+  # Avoid consuming the task agent's 384-token budget with hidden reasoning.
+  # This is an explicit smoke-test setting, not an established paper setting.
+  reasoning_enabled: false

@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentry-failure-manager"
+version = "0.11.0"
+description = "Sentry: external failure recovery and verified cross-task memory for LLM agents"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+dependencies = ["PyYAML>=6,<7"]
+keywords = ["llm-agents", "failure-recovery", "external-memory"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/nuglifeleoji/Sentry"
+Repository = "https://github.com/nuglifeleoji/Sentry"
+Issues = "https://github.com/nuglifeleoji/Sentry/issues"
+
+[project.optional-dependencies]
+appworld = ["appworld==0.1.3.post1"]
+dev = ["pytest>=8,<9", "build>=1.2,<2"]
+
+[project.scripts]
+sentry-validate = "Sentry.cli:main"
+
+[tool.setuptools]
+packages = ["Sentry"]
+include-package-data = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

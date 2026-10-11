@@ -1,0 +1,10 @@
+# Full Sentry algorithm/decoding constants are inherited from defaults.
+# Set an exact model ID that supports temperature=0 and 0.7 and these token limits.
+# This is an alternate-model condition, not the manuscript Together experiment.
+api:
+  provider: openai
+  model: YOUR_DEPLOYMENT_MODEL_ID
+  api_key_env: OPENAI_API_KEY
+  json_mode: native
+  timeout: 120.0
+  max_retries: 0

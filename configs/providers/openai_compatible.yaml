@@ -1,0 +1,11 @@
+# Full Sentry algorithm/decoding constants are inherited from defaults.
+# Replace this identifier with an exact model ID served by your endpoint.
+# Different models/providers are separate experimental conditions.
+api:
+  provider: openai_compatible
+  model: YOUR_DEPLOYMENT_MODEL_ID
+  base_url: http://127.0.0.1:8000/v1
+  api_key_env: null  # Set to SENTRY_API_KEY for authenticated gateways.
+  json_mode: native
+  timeout: 120.0
+  max_retries: 0

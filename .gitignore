@@ -1,0 +1,32 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# Python/build artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.venv_*/
+.venv-*/
+*.egg-info/
+build/
+dist/
+.coverage
+htmlcov/
+# Local runs and raw benchmark material
+outputs/
+experiments/outputs/
+Results/
+logs/
+data/
+*.log
+.tmp/
+# Old experiments retained outside the supported/public tree
+.legacy/
+# Documentation migration is deferred.
+/docs/
+.DS_Store
+tests/

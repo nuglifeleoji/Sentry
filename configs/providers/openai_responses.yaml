@@ -1,0 +1,10 @@
+# Full Sentry algorithm/decoding constants are inherited from defaults.
+# Replace this identifier with an exact model ID served by your endpoint.
+# Different models/providers are separate experimental conditions.
+api:
+  provider: openai_responses
+  model: YOUR_DEPLOYMENT_MODEL_ID
+  api_key_env: OPENAI_API_KEY
+  json_mode: native
+  timeout: 120.0
+  max_retries: 0
