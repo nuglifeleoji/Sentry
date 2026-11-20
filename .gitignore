@@ -29,4 +29,3 @@ data/
 # Documentation migration is deferred.
 /docs/
 .DS_Store
-tests/

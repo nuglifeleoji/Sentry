@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    name: Offline tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.14']
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install development dependencies
+        run: python -m pip install '.[dev]'
+
+      - name: Run offline tests
+        run: python -m pytest tests
+
+      - name: Build and verify release artifacts
+        if: matrix.python-version == '3.11'
+        run: |
+          python -m build
+          python scripts/check_release.py --sdist dist/*.tar.gz --wheel dist/*.whl
+
+      - name: Smoke test the installed wheel
+        if: matrix.python-version == '3.11'
+        run: |
+          python -m venv "$RUNNER_TEMP/sentry-wheel"
+          "$RUNNER_TEMP/sentry-wheel/bin/python" -m pip install dist/*.whl
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/sentry-wheel/bin/sentry-validate" "$GITHUB_WORKSPACE/configs/paper.yaml"
