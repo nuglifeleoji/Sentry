@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en" data-theme="amber">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sentry is a runtime layer that detects LLM agent failures, guides recovery, and learns from verified repairs.">
+  <title>Sentry · Learning to Recover from LLM Agent Failures at Test Time</title>
+  <link rel="icon" href="assets/sentry_logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="theme-control" data-theme-controls hidden>
+    <div class="swatches" role="group" aria-label="Page color">
+      <button class="swatch" type="button" data-theme-choice="amber" aria-label="Amber" aria-pressed="true" title="Amber"></button>
+      <button class="swatch" type="button" data-theme-choice="indigo" aria-label="Indigo" aria-pressed="false" title="Indigo"></button>
+      <button class="swatch" type="button" data-theme-choice="fern" aria-label="Fern" aria-pressed="false" title="Fern"></button>
+    </div>
+  </div>
+
+  <main class="wrap" id="main">
+    <header class="hero">
+      <h1 class="hero-logo">
+        <img src="assets/sentry_logo.png" alt="Sentry" width="1665" height="500" fetchpriority="high">
+      </h1>
+      <p class="hero-title">Learning to recover from <em>LLM agent failures</em> at test time.</p>
+      <p class="hero-affiliation">Stanford University</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="https://arxiv.org/abs/2610.02994">Paper</a>
+        <a class="button button-secondary" href="https://github.com/nuglifeleoji/Sentry">GitHub</a>
+      </div>
+    </header>
+
+    <section class="section demo-section" id="demo" aria-labelledby="demo-title">
+      <h2 class="visually-hidden" id="demo-title">Demo</h2>
+      <figure class="video-card">
+        <video controls playsinline preload="metadata" poster="assets/demo-poster.webp" width="1920" height="1080" aria-label="Full Sentry demo">
+          <source src="assets/sentry-demo-branded.mp4" type="video/mp4">
+          <a href="assets/sentry-demo-branded.mp4">Open the full demo MP4.</a>
+        </video>
+        <figcaption><strong>AppWorld walkthrough</strong><span>2:38 · 1080p · 60 fps</span><a href="assets/sentry_demo.mp4">Original MP4</a></figcaption>
+      </figure>
+    </section>
+
+    <section class="section" id="method" aria-labelledby="method-title">
+      <h2 class="section-title" id="method-title">How Sentry works</h2>
+      <div class="methods">
+        <article class="method-card">
+          <div class="method-visual" data-step="detect" aria-hidden="true"></div>
+          <h3>Detect a failure</h3>
+          <p>Check actions and watch recent steps for loops, stalled progress, or unsupported assumptions.</p>
+        </article>
+        <article class="method-card">
+          <div class="method-visual" data-step="repair" aria-hidden="true"></div>
+          <h3>Guide the recovery</h3>
+          <p>Correct invalid actions or retrieve a lesson that matches the agent’s current failure.</p>
+        </article>
+        <article class="method-card">
+          <div class="method-visual" data-step="learn" aria-hidden="true"></div>
+          <h3>Keep what worked</h3>
+          <p>Verify the recovery before saving a lesson from a successful behavioral repair.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="abstract" aria-labelledby="abstract-title">
+      <h2 class="section-title" id="abstract-title">Abstract</h2>
+      <p class="abstract">Sentry runs alongside an LLM agent and intervenes when it detects a failure. It keeps prior recovery lessons in an external playbook and retrieves only the ones that match the current failure. After a behavioral repair, Sentry checks the agent’s later steps before adding a lesson to the playbook. The paper evaluates Sentry on four benchmarks and tests how those lessons transfer to unseen tasks.</p>
+    </section>
+
+    <section class="section" id="results" aria-labelledby="results-title">
+      <h2 class="section-title" id="results-title">Highlights</h2>
+      <dl class="headline-results" aria-label="Headline findings">
+        <div>
+          <dt><a href="https://arxiv.org/html/2610.02994v1#S5.T1">+37%</a></dt>
+          <dd>Mean relative gain vs. the strongest runtime baselines across four benchmarks.</dd>
+        </div>
+        <div>
+          <dt><a href="https://arxiv.org/html/2610.02994v1#S5.F3">81.7%</a></dt>
+          <dd>Local recovery rate across 939 detected failures.</dd>
+        </div>
+        <div>
+          <dt><a href="https://arxiv.org/html/2610.02994v1#S5.T5">1.54×</a></dt>
+          <dd>Total token usage relative to the base agent.</dd>
+        </div>
+      </dl>
+      <details class="benchmark-details">
+        <summary>Benchmark breakdown</summary>
+        <div class="benchmark">
+          <div class="benchmark-tabs" data-benchmark-tabs aria-label="Choose a benchmark" hidden>
+            <button type="button" id="tab-webshop" data-result-tab aria-controls="webshop">WebShop</button>
+            <button type="button" id="tab-appworld" data-result-tab aria-controls="appworld">AppWorld</button>
+            <button type="button" id="tab-swe" data-result-tab aria-controls="swe">SWE-bench Lite</button>
+            <button type="button" id="tab-mind2web" data-result-tab aria-controls="mind2web">Mind2Web Replay</button>
+          </div>
+          <div class="benchmark-panel" data-result-panel id="webshop">
+            <div class="panel-intro">
+              <h3>WebShop</h3>
+              <p>Average reward</p>
+              <strong>+77.3%</strong>
+              <span>relative improvement</span>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-row"><span>Wink</span><span class="bar-track" aria-hidden="true"><span class="bar" style="--score:26.4%"></span></span><data value="0.264">0.264</data></div>
+              <div class="bar-row sentry-score"><span>Sentry</span><span class="bar-track" aria-hidden="true"><span class="bar" style="--score:46.8%"></span></span><data value="0.468">0.468</data></div>
+              <p class="chart-scale">Scale 0–1</p>
+            </div>
+          </div>
+          <div class="benchmark-panel" data-result-panel id="appworld">
+            <div class="panel-intro">
+              <h3>AppWorld</h3>
+              <p>Test pass rate</p>
+              <strong>+39.8%</strong>
+              <span>relative improvement</span>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-row"><span>Wink</span><span class="bar-track" aria-hidden="true"><span class="bar" style="--score:27.56%"></span></span><data value="27.56">27.56%</data></div>
+              <div class="bar-row sentry-score"><span>Sentry</span><span class="bar-track" aria-hidden="true"><span class="bar" style="--score:38.53%"></span></span><data value="38.53">38.53%</data></div>
+              <p class="chart-scale">Scale 0–100%</p>
+            </div>
+          </div>
+          <div class="benchmark-panel" data-result-panel id="swe">
+            <div class="panel-intro">
+              <h3>SWE-bench Lite</h3>
+              <p>Resolution accuracy</p>
+              <strong>+25.0%</strong>
+              <span>relative improvement</span>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-row"><span>AgentForesight</span><span class="bar-track" aria-hidden="true"><span class="bar" style="--score:24%"></span></span><data value="24">24.0%</data></div>
+              <div class="bar-row sentry-score"><span>Sentry</span><span class="bar-track" aria-hidden="true"><span class="bar" style="--score:30%"></span></span><data value="30">30.0%</data></div>
+              <p class="chart-scale">Scale 0–100%</p>
+            </div>
+          </div>
+          <div class="benchmark-panel" data-result-panel id="mind2web">
+            <div class="panel-intro">
+              <h3>Mind2Web Replay</h3>
+              <p>Normalized completion</p>
+              <strong>+7.1%</strong>
+              <span>relative improvement</span>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-row"><span>AgentFixer</span><span class="bar-track" aria-hidden="true"><span class="bar" style="--score:68.7%"></span></span><data value="68.7">68.7%</data></div>
+              <div class="bar-row sentry-score"><span>Sentry</span><span class="bar-track" aria-hidden="true"><span class="bar" style="--score:73.6%"></span></span><data value="73.6">73.6%</data></div>
+              <p class="chart-scale">Scale 0–100%</p>
+            </div>
+          </div>
+        </div>
+        <p class="source-note">Means over five runs with Qwen3.5-9B. <a href="https://arxiv.org/html/2610.02994v1#S5.T1">Paper Table 1</a></p>
+      </details>
+    </section>
+
+    <section class="section authors" id="authors" aria-labelledby="authors-title">
+      <h2 class="section-title" id="authors-title">Authors</h2>
+      <p class="author-list">Changxiu Ji<sup>*</sup>, Amy Lu<sup>*</sup>, Qizheng Zhang, Kunle Olukotun</p>
+      <p class="author-note">Stanford University · *Equal contribution</p>
+    </section>
+
+    <section class="section" id="cite" aria-labelledby="cite-title">
+      <h2 class="section-title" id="cite-title">BibTeX</h2>
+      <div class="citation-block">
+        <div class="citation-tools">
+          <button class="button button-secondary" type="button" data-copy-citation hidden>Copy BibTeX</button>
+        </div>
+        <pre data-citation tabindex="0" aria-label="BibTeX citation"><code>@misc{ji2026sentry,
+  title         = {Sentry: Learning to Recover from LLM Agent Failures at Test Time},
+  author        = {Ji, Changxiu and Lu, Amy and Zhang, Qizheng and Olukotun, Kunle},
+  year          = {2026},
+  eprint        = {2610.02994},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.LG},
+  url           = {https://arxiv.org/abs/2610.02994}
+}</code></pre>
+        <p class="copy-status" data-copy-status role="status"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a href="https://github.com/nuglifeleoji/Sentry">Sentry on GitHub</a>
+  </footer>
+</body>
+</html>
