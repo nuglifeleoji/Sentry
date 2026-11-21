@@ -117,19 +117,27 @@ For a real agent, submit each action-observation cycle to Sentry and include any
 
 ## Documentation
 
+The guides follow the recommended reading order: model-provider setup, configuration, agent integration, playbook and logging, and the AppWorld benchmark.
+
 | Guide | Contents |
 | --- | --- |
-| [Agent integration](docs/agent-integration.md) | Task lifecycle, step inputs, repair guidance, and recovery verification |
 | [Model providers](docs/model-providers.md) | Credentials, provider templates, and endpoint configuration |
+| [Configuration](docs/configuration.md) | Model and storage options, fixed algorithm settings, and configuration validation |
+| [Agent integration](docs/agent-integration.md) | Task lifecycle, step inputs, repair guidance, and recovery verification |
 | [Playbook and logging](docs/playbook-and-logging.md) | Cross-task memory, persistence, explicit loading, and runtime logs |
 | [AppWorld benchmark](docs/appworld-benchmark.md) | Environment setup, task selection, run limits, and result files |
-| [Runtime defaults](docs/runtime-defaults.md) | Algorithm and decoding settings used by the implementation |
 
 The [paper](assets/Sentry_paper.pdf) also examines conditional lesson exposure, fine-grained retrieval, transfer to unseen tasks, and combining Sentry with context evolution.
 
 ## Release Status
 
 This checkout includes the Sentry runtime, model-provider adapters, configuration templates, tests, and an AppWorld reference benchmark. The benchmark runner currently supports AppWorld dev tasks. The other benchmarks reported in the paper do not yet have runners in this checkout.
+
+## Contributing
+
+Contributions to Sentry are welcome, including bug fixes, integration examples, and documentation improvements.
+
+Bug reports and feature requests can be submitted through [GitHub Issues](https://github.com/nuglifeleoji/Sentry/issues). Code and documentation changes can be submitted as pull requests.
 
 ## Citation
 

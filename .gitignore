@@ -26,6 +26,4 @@ data/
 .tmp/
 # Old experiments retained outside the supported/public tree
 .legacy/
-# Documentation migration is deferred.
-/docs/
 .DS_Store
