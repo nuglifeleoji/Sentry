@@ -15,9 +15,9 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10+">
-  <img src="https://img.shields.io/badge/License-MIT-2ea44f" alt="MIT License">
-  <img src="https://img.shields.io/badge/arXiv-2610.02994-b31b1b" alt="arXiv">
+  <a href="#installation"><img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10+"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-2ea44f" alt="MIT License"></a>
+  <a href="https://arxiv.org/abs/2610.02994"><img src="https://img.shields.io/badge/arXiv-2610.02994-b31b1b" alt="arXiv"></a>
 </p>
 
 ## What is Sentry?
