@@ -69,7 +69,22 @@
 
     <section class="section" id="abstract" aria-labelledby="abstract-title">
       <h2 class="section-title" id="abstract-title">Abstract</h2>
-      <p class="abstract">Sentry runs alongside an LLM agent and intervenes when it detects a failure. It keeps prior recovery lessons in an external playbook and retrieves only the ones that match the current failure. After a behavioral repair, Sentry checks the agent’s later steps before adding a lesson to the playbook. The paper evaluates Sentry on four benchmarks and tests how those lessons transfer to unseen tasks.</p>
+      <p class="abstract">
+        LLM agents often fail mid-task due to invalid tool calls, repeated actions, or poorly grounded reasoning, and
+        learning from these failures is a path to reliability. We find that how failure knowledge reaches the agent
+        matters as much as what it contains. Failure lessons are conditional: kept in the agent’s context, they misfire
+        when their failure is absent, and removing them from an evolving playbook improves performance. Runtime
+        interventions, in contrast, act only when a failure occurs but do not learn from their repairs. We argue
+        that failure knowledge is conditional knowledge and should be conditionally exposed, and instantiate this
+        principle in Sentry, a failure-management layer that runs alongside the agent. When Sentry detects a failure,
+        it retrieves matching lessons from an external playbook to guide recovery, verifies without access to task
+        rewards whether the agent recovered, and stores a new lesson only if it did; the full playbook never enters the
+        agent’s context. Across multiple agentic benchmarks, Sentry outperforms the strongest runtime-intervention
+        baseline on every benchmark, by 37% on average, and the strongest context-evolution baseline by 39% on
+        the two benchmarks where both are evaluated; combining Sentry with context evolution yields further gains.
+        Learned lessons transfer to held-out tasks, and controlled experiments show that exposing the full playbook
+        to the agent lowers performance even when relevant lessons remain available on demand.
+      </p>
     </section>
 
     <section class="section" id="results" aria-labelledby="results-title">
@@ -77,15 +92,27 @@
       <dl class="headline-results" aria-label="Headline findings">
         <div>
           <dt><a href="https://arxiv.org/html/2610.02994v1#S5.T1">+37%</a></dt>
-          <dd>Mean relative gain vs. the strongest runtime baselines across four benchmarks.</dd>
+          <dd>
+            <strong>Runtime intervention baselines</strong>
+            <p>Mean relative gain over the best baseline on each benchmark.</p>
+            <p class="result-benchmarks">WebShop · AppWorld · SWE-bench Lite · Mind2Web</p>
+          </dd>
+        </div>
+        <div>
+          <dt><a href="https://arxiv.org/html/2610.02994v1#S5.T2">+39%</a></dt>
+          <dd>
+            <strong>Context evolution baselines</strong>
+            <p>Mean relative gain over ACE, the strongest baseline. The comparison also includes Reflexion, AWM, and ReasoningBank.</p>
+            <p class="result-benchmarks">Held-out tasks in WebShop and Mind2Web</p>
+          </dd>
         </div>
         <div>
           <dt><a href="https://arxiv.org/html/2610.02994v1#S5.F3">81.7%</a></dt>
-          <dd>Local recovery rate across 939 detected failures.</dd>
-        </div>
-        <div>
-          <dt><a href="https://arxiv.org/html/2610.02994v1#S5.T5">1.54×</a></dt>
-          <dd>Total token usage relative to the base agent.</dd>
+          <dd>
+            <strong>Local recovery rate</strong>
+            <p>Share of 939 detected failures judged resolved under the paper’s criteria.</p>
+            <p class="result-benchmarks">WebShop · AppWorld · SWE-bench Lite · Mind2Web</p>
+          </dd>
         </div>
       </dl>
       <details class="benchmark-details">
@@ -95,7 +122,7 @@
             <button type="button" id="tab-webshop" data-result-tab aria-controls="webshop">WebShop</button>
             <button type="button" id="tab-appworld" data-result-tab aria-controls="appworld">AppWorld</button>
             <button type="button" id="tab-swe" data-result-tab aria-controls="swe">SWE-bench Lite</button>
-            <button type="button" id="tab-mind2web" data-result-tab aria-controls="mind2web">Mind2Web Replay</button>
+            <button type="button" id="tab-mind2web" data-result-tab aria-controls="mind2web">Mind2Web</button>
           </div>
           <div class="benchmark-panel" data-result-panel id="webshop">
             <div class="panel-intro">
@@ -138,7 +165,7 @@
           </div>
           <div class="benchmark-panel" data-result-panel id="mind2web">
             <div class="panel-intro">
-              <h3>Mind2Web Replay</h3>
+              <h3>Mind2Web</h3>
               <p>Normalized completion</p>
               <strong>+7.1%</strong>
               <span>relative improvement</span>
