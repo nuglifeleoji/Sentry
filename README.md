@@ -1,12 +1,22 @@
-![Sentry Logo](assets/sentry_logo_gif.png)
+<p align="center">
+  <img src="assets/sentry_logo_gif.png" alt="Sentry Logo" width="600">
+</p>
 
 <h1 align="center"><strong>Sentry: An external self-improving failure management layer for LLM agents.</strong></h1>
 
-Sentry runs alongside your agent loop to detect failures, guide recovery, and learn reusable lessons from verified recoveries.
+**Sentry runs alongside your agent loop to detect failures, guide recovery, and learn reusable lessons from verified recoveries.**
 
-**[Quick Start](#quick-start)**  |  **[Paper (arXiv)](https://arxiv.org/abs/2610.02994)**  |  **[License](LICENSE)**
+<p align="center">
+  <strong><a href="#quick-start">Quick Start</a></strong> &ensp;|&ensp;
+  <strong><a href="https://arxiv.org/abs/2610.02994">Paper (arXiv)</a></strong> &ensp;|&ensp;
+  <strong><a href="LICENSE">License</a></strong>
+</p>
 
-![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) ![MIT License](https://img.shields.io/badge/License-MIT-2ea44f) ![arXiv](https://img.shields.io/badge/arXiv-2610.02994-b31b1b)
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10+">
+  <img src="https://img.shields.io/badge/License-MIT-2ea44f" alt="MIT License">
+  <img src="https://img.shields.io/badge/arXiv-2610.02994-b31b1b" alt="arXiv">
+</p>
 
 ## What is Sentry?
 
