@@ -4,11 +4,13 @@
 
 <h1 align="center"><strong>Sentry: An external self-improving failure management layer for LLM agents.</strong></h1>
 
-**Sentry runs alongside your agent loop to detect failures, guide recovery, and learn reusable lessons from verified recoveries.**
+<p align="center">
+  <strong>Sentry runs alongside your agent loop to detect failures, guide recovery, and learn reusable lessons from verified recoveries.</strong>
+</p>
 
 <p align="center">
-  <strong><a href="#quick-start">Quick Start</a></strong> &ensp;|&ensp;
-  <strong><a href="https://arxiv.org/abs/2610.02994">Paper (arXiv)</a></strong> &ensp;|&ensp;
+  <strong><a href="#quick-start">Quick Start</a></strong> &emsp;|&emsp;
+  <strong><a href="https://arxiv.org/abs/2610.02994">Paper (arXiv)</a></strong> &emsp;|&emsp;
   <strong><a href="LICENSE">License</a></strong>
 </p>
 
