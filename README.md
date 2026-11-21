@@ -1,33 +1,32 @@
-![Sentry Logo](assets/SENTRY.png)
+![Sentry Logo](assets/sentry_logo_gif.png)
 
-**An external runtime failure management layer for LLM agents.**
+<h1 align="center"><strong>Sentry: An external self-improving failure management layer for LLM agents.</strong></h1>
 
-Detect execution failures, guide recovery, and learn reusable lessons from verified recoveries.  
-Sentry runs alongside your agent loop without replacing the agent, environment, or evaluator.
+Sentry runs alongside your agent loop to detect failures, guide recovery, and learn reusable lessons from verified recoveries.
 
 **[Quick Start](#quick-start)**  |  **[Paper (arXiv)](https://arxiv.org/abs/2610.02994)**  |  **[License](LICENSE)**
 
-![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) [![MIT License](https://img.shields.io/badge/License-MIT-2ea44f)](LICENSE) [![arXiv](https://img.shields.io/badge/arXiv-2610.02994-b31b1b)](https://arxiv.org/abs/2610.02994)
+![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) ![MIT License](https://img.shields.io/badge/License-MIT-2ea44f) ![arXiv](https://img.shields.io/badge/arXiv-2610.02994-b31b1b)
 
 ## What is Sentry?
 
 Sentry is an external runtime failure management layer for LLM agents. It helps agents fix invalid actions and recover when they get stuck in loops, drift from the task, or make unsupported assumptions. Unlike typical runtime monitors with fixed advice, Sentry learns and evolves from recoveries that work. By detecting failures, guiding recovery, and checking that the repair worked, Sentry helps agents become more reliable across tasks without cluttering their context.
 
-## Sentry's demo
+## Demo
 
 ![Sentry demo](assets/sentry-demo.gif)
 
 ## Key Results
 
-- **37% average improvement** over the strongest runtime-intervention baseline across WebShop, AppWorld, SWE-bench Lite, and Mind2Web Replay.
-- **39% average improvement** over the strongest context-evolution baseline on held-out WebShop and Mind2Web Replay tasks.
-- **1.54× base-agent token usage**, versus up to 2.44× for other runtime methods, while saving 31.7s per task on SWE-bench Lite and 45.6s on AppWorld.
+Results reported in the [paper](assets/Sentry_paper.pdf):
+
+- **37% average relative improvement** over the strongest runtime-intervention baseline across WebShop, AppWorld, SWE-bench Lite, and Mind2Web Replay.
+- **39% average relative improvement** over the strongest context-evolution baseline on held-out WebShop and Mind2Web Replay tasks.
+- **1.54× base-agent token usage**, versus 2.44× for AgentForesight.
+- **Lower average task latency** than the base agent on SWE-bench Lite (31.7s saved) and AppWorld (45.6s saved).
 - **81.7% recovery rate** across 939 detected failures.
 
-
 ## Quick Start
-
-
 
 ### Installation
 
@@ -39,62 +38,60 @@ cd Sentry
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
-sentry-validate configs/paper.yaml
 ```
 
+### Configure a Model
 
+Copy the OpenAI configuration template, then set your model ID:
 
-### Integrate Sentry into Your Agent Loop
+```bash
+mkdir -p outputs
+cp configs/providers/openai.yaml outputs/sentry.yaml
+export OPENAI_API_KEY="your-api-key"
+```
 
-Configure a model provider, then submit each completed agent-environment cycle to Sentry:
+In `outputs/sentry.yaml`, replace `YOUR_DEPLOYMENT_MODEL_ID` with the exact model ID available to your account. Then validate the configuration:
+
+```bash
+sentry-validate outputs/sentry.yaml
+```
+
+Validation prints the resolved configuration as JSON without making a model request. For other providers or a local endpoint, see [Model providers](docs/model-providers.md).
+
+### Try a Recovery
+
+Run this Python example from the repository root. It submits an intentionally malformed action and asks the configured model to rewrite it:
 
 ```python
 from Sentry import SentryRunner, agent_step_from_parts
 
-runner = SentryRunner.from_yaml("configs/providers/openai_compatible.yaml")
+runner = SentryRunner.from_yaml("outputs/sentry.yaml")
 runner.start_task(
-    objective=task_objective,
-    action_schema=environment_action_schema,
+    objective="Inspect item 42 to check its price.",
+    action_schema='Return JSON: {"tool": "inspect", "args": {"item_id": <integer>}}',
 )
 
 try:
     step = agent_step_from_parts(
         step_id=0,
-        reasoning=reasoning,
-        raw_action=raw_action,
-        tool_name=tool_name,
-        tool_args=tool_args,
-        observation=observation,
-        parsed_ok=True,
-        schema_valid=True,
-        accepted_by_environment=True,
+        reasoning="Open the item details before deciding whether to buy.",
+        raw_action="inspect item 42",
+        observation="Item 42 is visible; its price has not been inspected.",
+        parsed_ok=False,
+        schema_valid=False,
+        parser_error="Expected a JSON object; received plain text.",
     )
-
-    repair = runner.step(step, terminal=False)
+    repair = runner.step(step)
     if repair is not None:
-        agent_messages.append(repair.prompt_text)
+        print("Repair route:", repair.route)
+        print("Next action:", runner.generate_repair(repair))
 finally:
     runner.finalize()
 ```
 
-Your application remains responsible for generating, validating, and executing actions. See the integration guide for the full lifecycle and validity rules.
+The route is `hard_repair`; the next action is model-generated and should follow the JSON schema. This example makes one model request and does not execute the returned action.
 
-### Run the AppWorld Benchmark
-
-The reference benchmark in `benchmarks/appworld/` uses the official AppWorld environment and evaluator. Run it from the repository checkout:
-
-```bash
-python3.11 -m venv .venv-appworld
-source .venv-appworld/bin/activate
-python -m pip install -e '.[appworld]'
-appworld install
-export APPWORLD_ROOT="$PWD/outputs/appworld-root"
-appworld download data --root "$APPWORLD_ROOT"
-export OPENROUTER_API_KEY="your-api-key"
-python -m benchmarks.appworld.run --config configs/providers/openrouter.yaml
-```
-
-See the AppWorld guide for environment setup, credentials, and run limits.
+For a real agent, submit each action-observation cycle to Sentry and include any returned guidance when generating the next action. Your application handles action generation, validation, execution, and task completion. Follow [Agent integration](docs/agent-integration.md) for the full lifecycle and validity rules.
 
 ## How It Works
 
@@ -106,17 +103,35 @@ See the AppWorld guide for environment setup, credentials, and run limits.
 4. **Recovery Verification:** Sentry checks whether the agent recovers over the following steps.
 5. **Online Playbook Learning:** Verified soft recoveries become reusable lessons for similar failures across tasks.
 
+## Documentation
 
+| Guide | Contents |
+| --- | --- |
+| [Agent integration](docs/agent-integration.md) | Task lifecycle, step inputs, repair guidance, and recovery verification |
+| [Model providers](docs/model-providers.md) | Credentials, provider templates, and endpoint configuration |
+| [Playbook and logging](docs/playbook-and-logging.md) | Cross-task memory, persistence, explicit loading, and runtime logs |
+| [AppWorld benchmark](docs/appworld-benchmark.md) | Environment setup, task selection, run limits, and result files |
+| [Runtime defaults](docs/runtime-defaults.md) | Algorithm and decoding settings used by the implementation |
 
-## Further Findings
+The [paper](assets/Sentry_paper.pdf) also examines conditional lesson exposure, fine-grained retrieval, transfer to unseen tasks, and combining Sentry with context evolution.
 
-- **Unconditional exposure can hurt:** Controlled experiments show that keeping all failure-specific knowledge in the agent's context lowers performance. This motivates Sentry to expose recovery lessons only when a matching failure occurs.
-- **Retrieval must match the failure:** Unfiltered retrieval and broad failure-type matching both perform worse than retrieval with fine-grained failure labels, motivating Sentry's label-based retrieval.
-- **Verified lessons transfer:** Lessons learned from verified recoveries improve performance on unseen tasks, and continued learning adds further gains.
-- **Task-level and failure-level learning are complementary:** Combining Sentry with context evolution achieves the best results, showing that the two forms of learning address different needs and add on to each other.
+## Release Status
 
+This checkout includes the Sentry runtime, model-provider adapters, configuration templates, tests, and an AppWorld reference benchmark. The benchmark runner currently supports AppWorld dev tasks. The other benchmarks reported in the paper do not yet have runners in this checkout.
 
+## Citation
 
-## Release
+If you use Sentry in your research, please cite:
 
-This repository currently contains the project overview and paper. We are finalizing our code and documentation and plan to release the full version in 2-3 weeks.
+```bibtex
+@article{ji2026sentry,
+  title={Sentry: Learning to Recover from LLM Agent Failures at Test Time},
+  author={Ji, Changxiu and Lu, Amy and Zhang, Qizheng and Olukotun, Kunle},
+  journal={arXiv preprint arXiv:2610.02994},
+  year={2026}
+}
+```
+
+## License
+
+Sentry is released under the [MIT License](LICENSE).
